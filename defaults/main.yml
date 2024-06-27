@@ -1,0 +1,10 @@
+---
+# defaults file for apple-bluetooth-keyboard
+ns: apple-bluetooth-keyboard
+pfx: /opt
+repo_dst: "{{pfx}}/{{ns}}"
+repo_user: root
+repo_group: root
+repo_url: https://github.com/ckuelker/apple-bluetooth-keyboard.git
+rules: /etc/udev/rules.d/90-apple-bluetooth-keyboard.rules
+
