@@ -1,0 +1,32 @@
+---
+# tasks file for apple-bluetooth-keyboard
+  # --- [ Apple bluetooth keyboard ] --------------------------------------
+- name: "Create repository directory: {{repo_dst}}"
+  file:
+    path: "{{repo_dst}}"
+    owner: "{{repo_user}}"
+    group: "{{repo_group}}"
+    mode: 0755
+    state: directory
+- name: "Clone repository {{repo_url}} to {{repo_dst}}"
+  git:
+    repo: "{{repo_url}}"
+    dest: "{{repo_dst}}"
+    clone: yes
+    update: yes
+  become: yes
+  become_user: "{{repo_user}}"
+- name: Define udev rules for Apple bluetooth keyboard
+  ansible.builtin.copy:
+    src: "{{repo_dst}}{{rules}}"
+    dest: "{{rules}}"
+    owner: root
+    group: root
+    mode: '0644'
+  register: udev_rule_file
+  # --- [ udev reload ] ---------------------------------------------------
+- name: Reload udev rules
+  ansible.builtin.command:
+    cmd: udevadm control --reload-rules
+  when: udev_rule_file.changed
+
